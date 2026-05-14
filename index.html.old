@@ -297,7 +297,7 @@
   // ══════════════════════════════════════════════════
   //  ⚙️  COLE AQUI A URL DO SEU GOOGLE APPS SCRIPT
   // ══════════════════════════════════════════════════
-  const SCRIPT_URL = "COLE_A_URL_AQUI";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyadH6GInqYzI-QR5JqLKtF7ww7e59z3uSUVNTjGYQBLzzMyaPviW756hGZ1zFlI0rIFQ/exec";
   // ══════════════════════════════════════════════════
 
   // Esconde aviso de config se URL já foi preenchida
