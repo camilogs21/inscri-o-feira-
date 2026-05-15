@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscrição — Feira de Apps</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Mono:wght@400;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f0f4f2;
+    min-height: 100vh;
+    font-family: 'Space Mono', monospace;
+    background-image:
+      linear-gradient(rgba(0,180,100,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,180,100,0.07) 1px, transparent 1px);
+    background-size: 32px 32px;
+    padding: 40px 16px 60px;
+  }
+
+  .container { max-width: 600px; margin: 0 auto; }
+
+  .header {
+    background: #00b86b;
+    border-radius: 16px 16px 0 0;
+    padding: 28px 36px 24px;
+  }
+  .header-tag { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.65); text-transform: uppercase; margin-bottom: 6px; }
+  .header h1 { font-family: 'Syne', sans-serif; font-size: 34px; font-weight: 800; color: #fff; line-height: 1; }
+  .header p { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 8px; letter-spacing: 1px; }
+
+  .form-body {
+    background: #ffffff;
+    border: 1px solid #d8e8df;
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    padding: 32px 36px 40px;
+  }
+
+  .section { margin-bottom: 28px; }
+
+  .section-label {
+    font-size: 10px; color: #00915a; letter-spacing: 3px;
+    text-transform: uppercase; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: #c5e3d4; }
+
+  .divider { height: 1px; background: #e8f0eb; margin: 24px 0; }
+
+  .row { display: grid; gap: 12px; margin-bottom: 12px; }
+  .row.two { grid-template-columns: 1fr 1fr; }
+  .row.one { grid-template-columns: 1fr; }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+
+  label.field-label {
+    font-size: 10px; color: #5a7a68;
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+
+  input[type="text"], input[type="email"], textarea {
+    background: #f7faf8;
+    border: 1px solid #c8ddd2;
+    border-radius: 8px; color: #1a2e23;
+    font-family: 'Space Mono', monospace; font-size: 13px;
+    padding: 10px 14px; outline: none; transition: border-color 0.2s, background 0.2s; width: 100%;
+  }
+  input::placeholder, textarea::placeholder { color: #9ab5a5; }
+  input:focus, textarea:focus { border-color: #00b86b; background: #fff; }
+  textarea { resize: vertical; min-height: 72px; }
+
+  .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  .check-item {
+    display: flex; align-items: center; gap: 10px;
+    border: 1px solid #c8ddd2; border-radius: 8px;
+    padding: 10px 14px; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    font-size: 12px; color: #3a5a48; user-select: none;
+    background: #f7faf8;
+  }
+  .check-item:hover { border-color: #00b86b; background: #edfaf4; }
+  .check-item input[type="radio"],
+  .check-item input[type="checkbox"] {
+    width: 15px; height: 15px; accent-color: #00b86b;
+    flex-shrink: 0; cursor: pointer;
+  }
+
+  .extra-field { margin-top: 10px; display: none; }
+  .extra-field.visible { display: block; }
+
+  .submit-btn {
+    width: 100%; background: #00b86b; color: #fff;
+    border: none; border-radius: 10px;
+    font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800;
+    padding: 16px; cursor: pointer; letter-spacing: 1px;
+    transition: background 0.2s, transform 0.15s; margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .submit-btn:hover { background: #009e5c; transform: translateY(-1px); }
+  .submit-btn:active { transform: scale(0.99); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff; border-radius: 50%;
+    animation: spin 0.7s linear infinite; display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .alert { border-radius: 10px; padding: 16px 20px; font-size: 13px; margin-top: 16px; display: none; line-height: 1.6; }
+  .alert-success { background: #edfaf4; border: 1px solid #a0dfc0; color: #1a6b43; }
+  .alert-error   { background: #fff0f0; border: 1px solid #ffb3b3; color: #c0392b; }
+  .alert strong { display: block; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+
+  .config-box {
+    background: #fffbea; border: 1px solid #f0d060;
+    border-radius: 10px; padding: 14px 18px;
+    margin-bottom: 24px; font-size: 12px; color: #7a6010; line-height: 1.7;
+  }
+  .config-box strong { color: #5a4500; display: block; margin-bottom: 4px; font-size: 13px; }
+  .config-box code { background: rgba(0,0,0,0.07); border-radius: 4px; padding: 1px 6px; font-size: 11px; word-break: break-all; }
+
+  .footer-note { text-align: center; font-size: 10px; color: #8aaa98; letter-spacing: 1px; margin-top: 20px; }
+
+  @media (max-width: 500px) {
+    .row.two { grid-template-columns: 1fr; }
+    .checkbox-grid { grid-template-columns: 1fr; }
+    .form-body, .header { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-tag">// inscrição de projeto</div>
+    <h1>FEIRA DE APPS</h1>
+    <p>2º Ano do Ensino Médio · 1 inscrição por dupla</p>
+  </div>
+
+  <div class="form-body">
+
+    <div class="config-box" id="configBox">
+      <strong>⚙️ Configuração necessária (professor)</strong>
+      Substitua <code>COLE_A_URL_AQUI</code> no final deste arquivo pela URL do seu Google Apps Script antes de distribuir.
+    </div>
+
+    <form id="inscricaoForm">
+
+      <!-- 01 TURMA -->
+      <div class="section">
+        <div class="section-label">01 · Turma</div>
+        <div class="field">
+          <label class="field-label">Nome da turma</label>
+          <input type="text" name="turma" placeholder="Ex: 2º A, 2º B..." required>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 02 ALUNO 1 -->
+      <div class="section">
+        <div class="section-label">02 · Aluno 1</div>
+        <div class="row two">
+          <div class="field">
+            <label class="field-label">Nome completo</label>
+            <input type="text" name="aluno1_nome" placeholder="Nome completo" required>
+          </div>
+          <div class="field">
+            <label class="field-label">E-mail</label>
+            <input type="email" name="aluno1_email" placeholder="aluno@escola.edu.br" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 03 ALUNO 2 -->
+      <div class="section">
+        <div class="section-label">03 · Aluno 2</div>
+        <div class="row two">
+          <div class="field">
+            <label class="field-label">Nome completo</label>
+            <input type="text" name="aluno2_nome" placeholder="Nome completo" required>
+          </div>
+          <div class="field">
+            <label class="field-label">E-mail</label>
+            <input type="email" name="aluno2_email" placeholder="aluno@escola.edu.br" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 04 PROJETO -->
+      <div class="section">
+        <div class="section-label">04 · Projeto</div>
+        <div class="row one">
+          <div class="field">
+            <label class="field-label">Nome do app</label>
+            <input type="text" name="app_nome" placeholder="Ex: EcoTrack, MedAlert..." required>
+          </div>
+        </div>
+        <div class="row one">
+          <div class="field">
+            <label class="field-label">Problema que o app resolve</label>
+            <textarea name="app_problema" placeholder="Descreva brevemente qual problema o app resolve..." required></textarea>
+          </div>
+        </div>
+        <div class="row one">
+          <div class="field">
+            <label class="field-label">Público-alvo</label>
+            <input type="text" name="app_publico" placeholder="Ex: estudantes, idosos, moradores do bairro...">
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 05 ÁREA TEMÁTICA -->
+      <div class="section">
+        <div class="section-label">05 · Área temática</div>
+        <div class="checkbox-grid">
+          <label class="check-item"><input type="radio" name="tema" value="Saúde e bem-estar" required> Saúde e bem-estar</label>
+          <label class="check-item"><input type="radio" name="tema" value="Educação"> Educação</label>
+          <label class="check-item"><input type="radio" name="tema" value="Meio ambiente"> Meio ambiente</label>
+          <label class="check-item"><input type="radio" name="tema" value="Games e entretenimento"> Games e entretenimento</label>
+          <label class="check-item"><input type="radio" name="tema" value="Comunidade e social"> Comunidade e social</label>
+          <label class="check-item"><input type="radio" name="tema" value="Outro" id="temaOutroRadio"> Outro</label>
+        </div>
+        <div class="extra-field" id="temaOutroBox">
+          <div class="field">
+            <label class="field-label">Descreva a área temática</label>
+            <input type="text" name="tema_outro" id="temaOutroInput" placeholder="Escreva o tema do seu projeto...">
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 06 FERRAMENTAS -->
+      <div class="section">
+        <div class="section-label">06 · Ferramentas utilizadas <span style="font-size:9px;color:#9ab5a5;letter-spacing:0;text-transform:none">(pode marcar mais de uma)</span></div>
+        <div class="checkbox-grid">
+          <label class="check-item"><input type="checkbox" name="ferr_github"  value="GitHub">     GitHub</label>
+          <label class="check-item"><input type="checkbox" name="ferr_vercel"  value="Vercel">     Vercel</label>
+          <label class="check-item"><input type="checkbox" name="ferr_chatgpt" value="ChatGPT">    ChatGPT</label>
+          <label class="check-item"><input type="checkbox" name="ferr_html"    value="HTML">       HTML</label>
+          <label class="check-item"><input type="checkbox" name="ferr_css"     value="CSS">        CSS</label>
+          <label class="check-item"><input type="checkbox" name="ferr_js"      value="JavaScript"> JavaScript</label>
+          <label class="check-item" style="grid-column: span 2;">
+            <input type="checkbox" name="ferr_outro_check" id="ferrOutroCheck"> Outro
+          </label>
+        </div>
+        <div class="extra-field" id="ferrOutroBox">
+          <div class="field">
+            <label class="field-label">Qual(is) outra(s) ferramenta(s)?</label>
+            <input type="text" name="ferr_outro" id="ferrOutroInput" placeholder="Ex: React, Figma, Python...">
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <div class="spinner" id="spinner"></div>
+        <span id="submitText">Enviar inscrição →</span>
+      </button>
+
+      <div class="alert alert-success" id="successMsg">
+        <strong>Inscrição enviada!</strong>
+        Dupla registrada na planilha com sucesso. Boa sorte na Feira de Apps!
+      </div>
+      <div class="alert alert-error" id="errorMsg">
+        <strong>Erro ao enviar</strong>
+        Verifique sua conexão e tente novamente. Se persistir, fale com o professor.
+      </div>
+    </form>
+  </div>
+
+  <p class="footer-note">Escola · Feira de Apps 2025 · 2º Ano do Ensino Médio</p>
+</div>
+
+<script>
+  // ══════════════════════════════════════════════════
+  //  ⚙️  COLE AQUI A URL DO SEU GOOGLE APPS SCRIPT
+  // ══════════════════════════════════════════════════
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmbQyN0BI6H5EJGY5OUOkMhzK7blRvvS8DsoNAdj6Uc9j6Lw98X7TNFgc8gAXFjM2D/exec";
+  // ══════════════════════════════════════════════════
+
+  if (SCRIPT_URL !== "COLE_A_URL_AQUI") {
+    document.getElementById("configBox").style.display = "none";
+  }
+
+  // Campo aberto ao selecionar "Outro" na área temática
+  document.querySelectorAll('input[name="tema"]').forEach(radio => {
+    radio.addEventListener("change", () => {
+      const box = document.getElementById("temaOutroBox");
+      const input = document.getElementById("temaOutroInput");
+      const isOutro = document.getElementById("temaOutroRadio").checked;
+      box.classList.toggle("visible", isOutro);
+      input.required = isOutro;
+      if (!isOutro) input.value = "";
+    });
+  });
+
+  // Campo aberto ao marcar "Outro" nas ferramentas
+  document.getElementById("ferrOutroCheck").addEventListener("change", function() {
+    const box = document.getElementById("ferrOutroBox");
+    const input = document.getElementById("ferrOutroInput");
+    box.classList.toggle("visible", this.checked);
+    input.required = this.checked;
+    if (!this.checked) input.value = "";
+  });
+
+  // Envio do formulário
+  document.getElementById("inscricaoForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    if (SCRIPT_URL === "COLE_A_URL_AQUI") {
+      const err = document.getElementById("errorMsg");
+      err.querySelector("strong").textContent = "URL não configurada";
+      err.style.display = "block";
+      return;
+    }
+
+    const btn = document.getElementById("submitBtn");
+    const spinner = document.getElementById("spinner");
+    const submitText = document.getElementById("submitText");
+    const successMsg = document.getElementById("successMsg");
+    const errorMsg = document.getElementById("errorMsg");
+
+    btn.disabled = true;
+    spinner.style.display = "block";
+    submitText.textContent = "Enviando...";
+    successMsg.style.display = "none";
+    errorMsg.style.display = "none";
+
+    const fd = new FormData(this);
+    const data = { timestamp: new Date().toLocaleString("pt-BR") };
+    fd.forEach((v, k) => data[k] = v);
+
+    // Consolida ferramentas em uma string
+    const ferramentas = [];
+    ["ferr_github","ferr_vercel","ferr_chatgpt","ferr_html","ferr_css","ferr_js"].forEach(n => {
+      if (data[n]) ferramentas.push(data[n]);
+    });
+    if (data.ferr_outro_check && data.ferr_outro) ferramentas.push(data.ferr_outro);
+    data.ferramentas = ferramentas.join(", ") || "Não informado";
+
+    // Tema: se "Outro", inclui descrição
+    if (data.tema === "Outro" && data.tema_outro) {
+      data.tema = "Outro: " + data.tema_outro;
+    }
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      this.style.opacity = "0.3";
+      this.style.pointerEvents = "none";
+      successMsg.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      errorMsg.style.display = "block";
+      btn.disabled = false;
+      spinner.style.display = "none";
+      submitText.textContent = "Enviar inscrição →";
+    }
+  });
+</script>
+
+</body>
+</html>
